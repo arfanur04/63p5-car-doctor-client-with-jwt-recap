@@ -6,7 +6,9 @@ import ServiceCard from "./ServiceCard";
 // DRY --> Do not Repeat Yourself
 const Services = () => {
 	const [asc, setAsc] = useState(true);
-	const services = useServices(asc);
+	const [min, setMin] = useState(50);
+	const [max, setMax] = useState(150);
+	const services = useServices(asc, min, max);
 	// const [services, setServices] = useState([]);
 
 	// useEffect(() => {
@@ -14,6 +16,15 @@ const Services = () => {
 	// 		.then((res) => res.json())
 	// 		.then((data) => setServices(data));
 	// }, [asc]);
+
+	const handlePriceRange = (e) => {
+		e.preventDefault();
+		const form = e.target;
+		const min = form.min.value;
+		const max = form.max.value;
+		setMin(min);
+		setMax(max);
+	};
 
 	return (
 		<div className="mt-4">
@@ -31,6 +42,37 @@ const Services = () => {
 				>
 					{asc ? "Price: High to Low" : "Price: Low To High"}
 				</button>
+				<div>
+					<form
+						onSubmit={handlePriceRange}
+						className="flex items-center justify-center"
+					>
+						<input
+							type="number"
+							name="min"
+							placeholder="min price"
+							required
+							className="input input-bordered custom-number-input"
+						/>
+						<input
+							type="number"
+							name="max"
+							placeholder="max price"
+							required
+							className="input input-bordered custom-number-input"
+						/>
+						<input
+							className="btn"
+							type="reset"
+							value="X"
+						/>
+						<input
+							type="submit"
+							className="btn btn-secondary"
+							value="Search By Price Range"
+						/>
+					</form>
+				</div>
 			</div>
 			<div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
 				{services.map((service) => (
