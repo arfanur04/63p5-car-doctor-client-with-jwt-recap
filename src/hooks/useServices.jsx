@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { axiosSecure } from "./useAxiosSecure";
 
-const useServices = (asc, min, max) => {
+const useServices = (asc, min, max, search) => {
 	const [services, setServices] = useState([]);
 
 	useEffect(() => {
@@ -10,11 +10,13 @@ const useServices = (asc, min, max) => {
 		// 	.then((data) => setServices(data));
 
 		axiosSecure(
-			`/services?sort=${asc ? "asc" : "desc"}&min=${min}&max=${max}`
+			`/services?sort=${
+				asc ? "asc" : "desc"
+			}&min=${min}&max=${max}&search=${search}`
 		).then((res) => {
 			setServices(res.data);
 		});
-	}, [asc, max, min]);
+	}, [asc, max, min, search]);
 
 	return services;
 };

@@ -6,13 +6,15 @@ import ServiceCard from "./ServiceCard";
 // DRY --> Do not Repeat Yourself
 const Services = () => {
 	const [asc, setAsc] = useState(true);
-	const [min, setMin] = useState(50);
-	const [max, setMax] = useState(150);
-	const services = useServices(asc, min, max);
+	const [min, setMin] = useState(undefined);
+	const [max, setMax] = useState(undefined);
+	const [search, setSearch] = useState("");
+
+	const services = useServices(asc, min, max, search);
 	// const [services, setServices] = useState([]);
 
 	// useEffect(() => {
-	// 	fetch(`http://localhost:5000/services?sort=${asc ? "asc" : "des"}`)
+	// 	fetch(`http://localhost:5000/services?sort=${asc ? "asc" : "des"}&search=${search}`)
 	// 		.then((res) => res.json())
 	// 		.then((data) => setServices(data));
 	// }, [asc]);
@@ -26,6 +28,18 @@ const Services = () => {
 		setMax(max);
 	};
 
+	const handleReset = () => {
+		setMin(undefined);
+		setMax(undefined);
+	};
+
+	const handleSearch = (e) => {
+		e.preventDefault();
+		const form = e.target;
+		const search = form.search.value;
+		setSearch(search);
+	};
+
 	return (
 		<div className="mt-4">
 			<div className="text-center">
@@ -36,12 +50,28 @@ const Services = () => {
 					humour, or randomised <br /> words which do not look even slightly
 					believable.
 				</p>
+				{/* sort by name */}
+				<form onSubmit={handleSearch}>
+					<input
+						type="text"
+						name="search"
+						// required
+						className="input input-bordered"
+					/>
+					<input
+						type="submit"
+						value={"Search"}
+						className="btn btn-secondary"
+					/>
+				</form>
+				{/* sort by asc or desc */}
 				<button
 					onClick={() => setAsc(!asc)}
 					className="btn btn-secondary"
 				>
 					{asc ? "Price: High to Low" : "Price: Low To High"}
 				</button>
+				{/* sort by price range */}
 				<div>
 					<form
 						onSubmit={handlePriceRange}
@@ -65,6 +95,7 @@ const Services = () => {
 							className="btn"
 							type="reset"
 							value="X"
+							onClick={() => handleReset()}
 						/>
 						<input
 							type="submit"
